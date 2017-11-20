@@ -6,13 +6,10 @@ jobs:
      steps:
        - checkout
        #- run: echo "george-edison55-precise-backports" | sudo tee -a /etc/apt/sources.list
-       - run: sudo add-apt-repository ppa:george-edison55/precise-backports
-       - run: sudo add-apt-repository ppa:mosquitto-dev/mosquitto-ppa -y
-       - run: sudo apt-get update -qq
-       - run: sudo apt-get install mosquitto
-       - run: sudo apt-get install cmake
-       - run: sudo apt-get install doxygen
-       - run: sudo apt-get cmake-data
+       - run: sudo -E apt-add-repository -y "ppa:george-edison55/precise-backports"
+       - run: sudo -E apt-add-repository -y "ppa:mosquitto-dev/mosquitto-ppa"
+       - run: sudo -E apt-get -yq update
+       - run: sudo -E apt-get -yq --no-install-suggests --no-install-recommends --force-yes install cmake cmake-data mosquitto doxygen
        - run: mosquitto -h
        - run: mosquitto -c test/tls-testing/mosquitto.conf &
        - run:
