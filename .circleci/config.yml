@@ -1,0 +1,29 @@
+version: 2
+jobs:
+   build:
+     working_directory: ~/paho.mqtt.c
+     machine: true
+     steps:
+       - checkout
+       - run: echo "george-edison55-precise-backports" | sudo tee -a /etc/apt/sources.list
+       - run: sudo add-apt-repository ppa:mosquitto-dev/mosquitto-ppa -y
+       - run: sudo apt-get update -qq
+       - run: sudo apt-get install mosquitto
+       - run: sudo apt-get install cmake
+       - run: sudo apt-get install doxygen
+       - run: sudo apt-get cmake-data
+       - run: mosquitto -h
+       - run: mosquitto -c test/tls-testing/mosquitto.conf &
+       - run:
+          command: |
+            set -e
+            rm -rf build.paho
+            mkdir build.paho
+            cd build.paho
+            echo "travis build dir $CIRCLE_WORKING_DIRECTORY pwd $PWD"
+            cmake -DPAHO_WITH_SSL=TRUE -DPAHO_BUILD_DOCUMENTATION=FALSE -DPAHO_BUILD_SAMPLES=TRUE ..
+            make
+            python ../test/mqttsas2.py &
+            ctest -VV --timeout 600
+            kill %1
+            killall mosquitto

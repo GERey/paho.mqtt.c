@@ -9,7 +9,7 @@ ELSE ()
   SET(MQTT_TEST_BROKER "tcp://localhost:1883" CACHE STRING "Hostname of a test MQTT broker to use")
   SET(MQTT_TEST_PROXY "tcp://localhost:1884" CACHE STRING "Hostname of the test proxy to use")
   SET(MQTT_SSL_HOSTNAME "localhost" CACHE STRING "Hostname of a test SSL MQTT broker to use")
-  SET(CERTDIR $ENV{TRAVIS_BUILD_DIR}/test/ssl)
+  SET(CERTDIR $ENV{CIRCLE_WORKING_DIR}/test/ssl)
 ENDIF ()
 
 IF (PAHO_WITH_SSL)
